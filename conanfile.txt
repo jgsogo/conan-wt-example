@@ -1,0 +1,6 @@
+[requires]
+wt/4.5.0
+
+[generators]
+cmake
+cmake_find_package
