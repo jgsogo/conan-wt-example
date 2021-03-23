@@ -1,11 +1,15 @@
-name: Tests EDA
+name: Build and run
 
 on: [push, pull_request]
 
 
 jobs:
-  linux:
-    runs-on: ubuntu-latest
+  conan_build:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
     - name: Checkout
       uses: actions/checkout@v2.0.0
@@ -23,15 +27,18 @@ jobs:
         python -m pip install conan
         conan --version
         conan config init
+
+    - name: Adjust libcxx
+      run: |
         conan profile update settings.compiler.libcxx=libstdc++11 default
-        conan profile show default
+      if: ${{ matrix.os == 'ubuntu-latest' }}
 
     - name: Compile
       run: |
         mkdir _build && cd _build
         conan install ../conanfile.txt -s build_type=Release
         cmake .. -DCMAKE_MODULE_PATH=$(pwd)
-        cmake --build .
+        cmake --build . --config Release
 
     - name: Run tests
       working-directory: _build
