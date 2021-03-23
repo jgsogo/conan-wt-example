@@ -48,5 +48,6 @@ jobs:
     - name: Run help
       working-directory: _build
       run: |
-        ./bin/wt-example --help && exit 0
+        ./bin/wt-example --help
+        exit 0
       # ./bin/wt-example --docroot="." --http-listen=127.0.0.1:8080
