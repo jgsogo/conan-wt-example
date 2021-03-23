@@ -38,7 +38,7 @@ jobs:
       run: |
         mkdir _build && cd _build
         conan install ../conanfile.txt -s build_type=Release
-        cmake .. -DCMAKE_MODULE_PATH=$(pwd)
+        cmake .. -DCMAKE_MODULE_PATH=.
         cmake --build . --config Release
 
     - name: Run tests
