@@ -39,11 +39,19 @@ jobs:
         mkdir _build && cd _build
         conan install ../conanfile.txt -s build_type=Release
 
-    - name: Compile
+    - name: Macos/Linux build
       run: |
         cd _build
-        cmake .. -DCMAKE_MODULE_PATH=.
+        cmake .. -DCMAKE_MODULE_PATH=$(pwd)
         cmake --build . --config Release
+      if: ${{ matrix.os != 'windows-latest' }}
+
+    - name: Windows build
+      run: |
+        cd _build
+        cmake .. -DCMAKE_MODULE_PATH=%cd%
+        cmake --build . --config Release
+      if: ${{ matrix.os == 'windows-latest' }}
 
     - name: Run help
       working-directory: _build
