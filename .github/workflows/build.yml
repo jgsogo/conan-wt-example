@@ -34,14 +34,18 @@ jobs:
         conan profile update settings.compiler.libcxx=libstdc++11 default
       if: ${{ matrix.os == 'ubuntu-latest' }}
 
-    - name: Compile
+    - name: Install dependencies
       run: |
         mkdir _build && cd _build
         conan install ../conanfile.txt -s build_type=Release
+
+    - name: Compile
+      run: |
+        cd _build
         cmake .. -DCMAKE_MODULE_PATH=.
         cmake --build . --config Release
 
-    - name: Run tests
+    - name: Run help
       working-directory: _build
       run: |
         ./bin/wt-example --help
